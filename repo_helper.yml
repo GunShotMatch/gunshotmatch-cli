@@ -1,0 +1,51 @@
+---
+modname: gunshotmatch-cli
+copyright_years: "2020-2023"
+author: "Dominic Davis-Foster"
+email: "dominic@davis-foster.co.uk"
+version: "0.0.0"
+username: "GunShotMatch"
+assignee: "domdfcoding"
+license: 'MIT'
+short_desc: 'GunShotMatch Command-Line Interface'
+
+enable_tests: false
+enable_conda: false
+enable_docs: false
+on_pypi: false
+use_whey: true
+
+python_versions:
+ 3.8:
+ 3.9:
+ "3.10":
+ "3.11":
+ "3.12":
+
+additional_ignore:
+ - trees
+ - output
+ - output_orig
+ - data
+ - unknowns
+ - decision_tree_data
+ - config.toml
+ - method.toml
+ - projects.toml
+ - unknown-example.toml
+
+
+# tox_unmanaged:
+#  - testenv
+
+# extra_sphinx_extensions:
+#  - attr_utils.autoattrs
+#  - sphinx_toolbox.more_autosummary.column_widths
+# #  - sphinx_toolbox.latex.succinct_seealso
+
+# sphinx_conf_epilogue:
+#  - nitpicky = True
+#  - autosummary_widths_builders = ["latex"]
+# #  - needspace_amount = r"5\baselineskip"
+
+# standalone_contrib_guide: true

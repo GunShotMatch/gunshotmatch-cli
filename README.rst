@@ -4,7 +4,7 @@ gunshotmatch-cli
 
 .. start short_desc
 
-**GunShotMatch Command-Line Interface**
+**GunShotMatch Command-Line Interface.**
 
 .. end short_desc
 

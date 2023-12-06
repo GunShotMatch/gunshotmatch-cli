@@ -5,7 +5,7 @@ build-backend = "whey"
 [project]
 name = "gunshotmatch-cli"
 version = "0.0.0"
-description = "GunShotMatch Command-Line Interface"
+description = "GunShotMatch Command-Line Interface."
 readme = "README.rst"
 keywords = []
 dynamic = [ "requires-python", "classifiers", "dependencies",]
@@ -46,6 +46,11 @@ directives = [ "code-block",]
 
 [tool.dependency-dash."requirements.txt"]
 order = 10
+
+[tool.dep_checker.name_mapping]
+attrs = "attr"
+pymassspec = "pyms"
+scikit-learn = "sklearn"
 
 [tool.snippet-fmt.languages.python]
 reformat = true

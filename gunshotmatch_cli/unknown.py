@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 #
-#  __init__.py
+#  decision_tree.py
 """
-GunShotMatch Command-Line Interface.
+Pipeline for unknown propellant/OGSR sample.
 """
 #
 #  Copyright © 2020-2023 Dominic Davis-Foster <dominic@davis-foster.co.uk>
@@ -26,8 +26,38 @@ GunShotMatch Command-Line Interface.
 #  OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-__author__: str = "Dominic Davis-Foster"
-__copyright__: str = "2020-2023 Dominic Davis-Foster"
-__license__: str = "MIT License"
-__version__: str = "0.0.0"
-__email__: str = "dominic@davis-foster.co.uk"
+# 3rd party
+import click
+
+__all__ = ("decision_tree", )
+
+
+@click.argument("unknown_toml", default="unknown.toml")
+@click.command()
+def unknown(unknown_toml: str = "unknown.toml") -> None:
+	"""
+	Pipeline for unknown propellant/OGSR sample.
+	"""
+
+	# 3rd party
+	from domdf_python_tools.paths import PathPlus
+	from gunshotmatch_pipeline.exporters import write_matches_json
+	from gunshotmatch_pipeline.unknowns import UnknownSettings, process_unknown
+
+	unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
+	# print(unknown)
+	# print(unknown.load_method())
+	# print(unknown.load_config())
+	print("Processing unknown", unknown.name)
+
+	project = process_unknown(unknown, unknown.output_directory, recreate=False)
+
+	write_matches_json(project, PathPlus(unknown.output_directory))
+	assert project.consolidated_peaks is not None
+	print(len(project.consolidated_peaks))
+
+	# print(ms_comparison_df)
+
+
+if __name__ == "__main__":
+	unknown()

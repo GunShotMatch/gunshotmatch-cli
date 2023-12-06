@@ -7,7 +7,7 @@ version: "0.0.0"
 username: "GunShotMatch"
 assignee: "domdfcoding"
 license: 'MIT'
-short_desc: 'GunShotMatch Command-Line Interface'
+short_desc: 'GunShotMatch Command-Line Interface.'
 
 enable_tests: false
 enable_conda: false

@@ -23,6 +23,9 @@ Homepage = "https://github.com/GunShotMatch/gunshotmatch-cli"
 "Issue Tracker" = "https://github.com/GunShotMatch/gunshotmatch-cli/issues"
 "Source Code" = "https://github.com/GunShotMatch/gunshotmatch-cli"
 
+[project.scripts]
+gunshotmatch-cli = "gunshotmatch_cli.__main__:main"
+
 [tool.whey]
 base-classifiers = []
 python-versions = [ "3.8", "3.9", "3.10", "3.11", "3.12",]

@@ -38,14 +38,14 @@ __all__ = ("decision_tree", "gunshotmatch", "projects", "unknown")
 
 @version_option(version_callback)
 @click.group()
-def gunshotmatch():
+def main():
 	"""
 	GunShotMatch command-line interface.
 	"""
 
 
 @click.argument("projects_toml", default="projects.toml")
-@gunshotmatch.command()
+@main.command()
 def projects(projects_toml: str = "projects.toml") -> None:
 	"""
 	Pipeline for creating projects from raw datafiles.
@@ -96,7 +96,7 @@ def projects(projects_toml: str = "projects.toml") -> None:
 
 
 @click.argument("unknown_toml", default="unknown.toml")
-@gunshotmatch.command()
+@main.command()
 def unknown(unknown_toml: str = "unknown.toml") -> None:
 	"""
 	Pipeline for unknown propellant/OGSR sample.
@@ -125,7 +125,7 @@ def unknown(unknown_toml: str = "unknown.toml") -> None:
 
 @click.option("-p", "--projects", "projects_toml", default="projects.toml")
 @click.option("-o", "--unknown", "unknown_toml", default="unknown.toml")
-@gunshotmatch.command()
+@main.command()
 def decision_tree(projects_toml: str = "projects.toml", unknown_toml: str = "unknown.toml") -> None:
 	"""
 	Create decision tree and predict class of an unknown sample.
@@ -180,4 +180,4 @@ def decision_tree(projects_toml: str = "projects.toml", unknown_toml: str = "unk
 
 
 if __name__ == "__main__":
-	gunshotmatch()
+	main()

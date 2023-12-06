@@ -35,6 +35,10 @@ additional_ignore:
  - unknown-example.toml
 
 
+console_scripts:
+ - gunshotmatch-cli = gunshotmatch_cli.__main__:main
+
+
 # tox_unmanaged:
 #  - testenv
 

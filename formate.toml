@@ -31,5 +31,12 @@ lines_between_types = 0
 use_parentheses = true
 remove_redundant_aliases = true
 default_section = "THIRDPARTY"
-known_third_party = [ "gunshotmatch_pipeline",]
+known_third_party = [
+    "click",
+    "domdf_python_tools",
+    "gunshotmatch_pipeline",
+    "libgunshotmatch",
+    "numpy",
+    "scikit_learn",
+]
 known_first_party = "gunshotmatch_cli"

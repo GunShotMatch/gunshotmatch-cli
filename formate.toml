@@ -33,6 +33,7 @@ remove_redundant_aliases = true
 default_section = "THIRDPARTY"
 known_third_party = [
     "click",
+    "consolekit",
     "domdf_python_tools",
     "gunshotmatch_pipeline",
     "libgunshotmatch",

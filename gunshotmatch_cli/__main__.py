@@ -38,10 +38,10 @@ __all__ = ("decision_tree", "gunshotmatch", "projects", "unknown")
 
 @version_option(version_callback)
 @click.group()
-def main():
+def main() -> None:
 	"""
 	GunShotMatch command-line interface.
-	"""
+	"""  # noqa: D403  (false positive)
 
 
 @click.argument("projects_toml", default="projects.toml")
@@ -168,10 +168,9 @@ def decision_tree(projects_toml: str = "projects.toml", unknown_toml: str = "unk
 	# print("Ranked:", [factorize_map[cls] for cls in reversed(argsort.tolist()[0])])
 	# print("       ", sorted(classifier.predict_proba(unknown_sample)[0], reverse=True))
 
-	for idx, (propellant, probability) in enumerate(
-			zip([factorize_map[cls] for cls in reversed(argsort.tolist()[0])],
-				sorted(classifier.predict_proba(unknown_sample)[0], reverse=True))
-			):
+	class_names = [factorize_map[cls] for cls in reversed(argsort.tolist()[0])]
+	probabilities = sorted(classifier.predict_proba(unknown_sample)[0], reverse=True)
+	for idx, (propellant, probability) in enumerate(zip(class_names, probabilities)):
 		if probability:
 			print(idx + 1, probability, propellant)
 

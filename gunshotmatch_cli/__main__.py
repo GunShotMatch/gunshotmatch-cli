@@ -33,7 +33,7 @@ from consolekit.options import version_option
 # this package
 from gunshotmatch_cli.versions import version_callback
 
-__all__ = ("decision_tree", "gunshotmatch", "projects", "unknown")
+__all__ = ("decision_tree", "main", "projects", "unknown")
 
 
 @version_option(version_callback)

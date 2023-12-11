@@ -29,14 +29,25 @@ GunShotMatch Command-Line Interface.
 # 3rd party
 import click
 from consolekit.options import version_option
+from consolekit.versions import get_version_callback
 
 # this package
-from gunshotmatch_cli.versions import version_callback
+import gunshotmatch_cli
 
 __all__ = ("decision_tree", "main", "projects", "unknown")
 
 
-@version_option(version_callback)
+@version_option(
+		get_version_callback(
+				gunshotmatch_cli.__version__,
+				"GunShotMatch CLI",
+				{
+						"gunshotmatch-pipeline": "GunShotMatch Pipeline",
+						"libgunshotmatch": "LibGunShotMatch",
+						"scikit-learn": "scikit-learn",
+						}
+				)
+		)
 @click.group()
 def main() -> None:
 	"""

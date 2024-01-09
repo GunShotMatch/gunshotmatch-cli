@@ -35,11 +35,7 @@ license-key = "MIT"
 package = "gunshotmatch_cli"
 
 [tool.importcheck]
-always = [
-    "gunshotmatch_cli",
-    "gunshotmatch_cli.__main__",
-    "gunshotmatch_cli.decision_tree",
-]
+always = [ "gunshotmatch_cli", "gunshotmatch_cli.__main__", "gunshotmatch_cli.decision_tree",]
 
 [tool.mypy]
 python_version = "3.8"

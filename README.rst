@@ -17,8 +17,10 @@ gunshotmatch-cli
 
 	* - Tests
 	  - |actions_linux| |actions_windows| |actions_macos|
+	* - PyPI
+	  - |pypi-version| |supported-versions| |supported-implementations| |wheel|
 	* - Activity
-	  - |commits-latest| |commits-since| |maintained|
+	  - |commits-latest| |commits-since| |maintained| |pypi-downloads|
 	* - QA
 	  - |codefactor| |actions_flake8| |actions_mypy|
 	* - Other
@@ -52,6 +54,22 @@ gunshotmatch-cli
 	:target: https://www.codefactor.io/repository/github/GunShotMatch/gunshotmatch-cli
 	:alt: CodeFactor Grade
 
+.. |pypi-version| image:: https://img.shields.io/pypi/v/gunshotmatch-cli
+	:target: https://pypi.org/project/gunshotmatch-cli/
+	:alt: PyPI - Package Version
+
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/gunshotmatch-cli?logo=python&logoColor=white
+	:target: https://pypi.org/project/gunshotmatch-cli/
+	:alt: PyPI - Supported Python Versions
+
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/gunshotmatch-cli
+	:target: https://pypi.org/project/gunshotmatch-cli/
+	:alt: PyPI - Supported Implementations
+
+.. |wheel| image:: https://img.shields.io/pypi/wheel/gunshotmatch-cli
+	:target: https://pypi.org/project/gunshotmatch-cli/
+	:alt: PyPI - Wheel
+
 .. |license| image:: https://img.shields.io/github/license/GunShotMatch/gunshotmatch-cli
 	:target: https://github.com/GunShotMatch/gunshotmatch-cli/blob/master/LICENSE
 	:alt: License
@@ -67,8 +85,12 @@ gunshotmatch-cli
 	:target: https://github.com/GunShotMatch/gunshotmatch-cli/commit/master
 	:alt: GitHub last commit
 
-.. |maintained| image:: https://img.shields.io/maintenance/yes/2023
+.. |maintained| image:: https://img.shields.io/maintenance/yes/2024
 	:alt: Maintenance
+
+.. |pypi-downloads| image:: https://img.shields.io/pypi/dm/gunshotmatch-cli
+	:target: https://pypi.org/project/gunshotmatch-cli/
+	:alt: PyPI - Downloads
 
 .. end shields
 
@@ -77,12 +99,12 @@ Installation
 
 .. start installation
 
-``gunshotmatch-cli`` can be installed from GitHub.
+``gunshotmatch-cli`` can be installed from PyPI.
 
 To install with ``pip``:
 
 .. code-block:: bash
 
-	$ python -m pip install git+https://github.com/GunShotMatch/gunshotmatch-cli
+	$ python -m pip install gunshotmatch-cli
 
 .. end installation

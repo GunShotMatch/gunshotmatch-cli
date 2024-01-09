@@ -77,7 +77,7 @@ gunshotmatch-cli
 .. |language| image:: https://img.shields.io/github/languages/top/GunShotMatch/gunshotmatch-cli
 	:alt: GitHub top language
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/GunShotMatch/gunshotmatch-cli/v0.0.0
+.. |commits-since| image:: https://img.shields.io/github/commits-since/GunShotMatch/gunshotmatch-cli/v0.1.0
 	:target: https://github.com/GunShotMatch/gunshotmatch-cli/pulse
 	:alt: GitHub commits since tagged version
 

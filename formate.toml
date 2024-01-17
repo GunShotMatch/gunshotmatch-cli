@@ -36,7 +36,9 @@ known_third_party = [
     "consolekit",
     "domdf_python_tools",
     "gunshotmatch_pipeline",
+    "gunshotmatch_reports",
     "libgunshotmatch",
+    "libgunshotmatch_mpl",
     "numpy",
     "scikit_learn",
 ]

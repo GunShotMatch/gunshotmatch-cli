@@ -30,6 +30,9 @@ GunShotMatch Command-Line Interface.
 import click
 from consolekit.options import version_option
 from consolekit.versions import get_version_callback
+from gunshotmatch_reports.chromatogram import build_chromatogram_report
+from gunshotmatch_reports.peaks import build_peak_report
+from libgunshotmatch_mpl.peakviewer import load_project
 
 # this package
 import gunshotmatch_cli
@@ -187,6 +190,58 @@ def decision_tree(projects_toml: str = "projects.toml", unknown_toml: str = "unk
 
 	# take = classifier.classes_.take(argmax, axis=0)
 	# print("take:", list(take))
+
+
+@click.argument("projects_toml", default="projects.toml")
+@main.command()
+def peak_report(projects_toml: str = "projects.toml") -> None:
+	"""
+	Generate peak reports for the projects.
+	"""
+
+	# 3rd party
+	from domdf_python_tools.paths import PathPlus
+	from gunshotmatch_pipeline.projects import Projects
+	from gunshotmatch_pipeline.utils import project_plural
+
+	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
+	output_dir = PathPlus(projects.global_settings.output_directory).abspath()
+
+	print(f"Generating peak reports for {len(projects)} {project_plural(len(projects))}:")
+	for project_name in projects.per_project_settings:
+		print(f"  {project_name}")
+	print(f"Saving to {output_dir.as_posix()!r}")
+
+	for project_name in projects.per_project_settings:
+		project = load_project(output_dir / (project_name + ".gsmp"))
+
+		build_peak_report(project)
+
+
+@click.argument("projects_toml", default="projects.toml")
+@main.command()
+def chromatograms(projects_toml: str = "projects.toml") -> None:
+	"""
+	Generate chromatogram reports for the projects.
+	"""
+
+	# 3rd party
+	from domdf_python_tools.paths import PathPlus
+	from gunshotmatch_pipeline.projects import Projects
+	from gunshotmatch_pipeline.utils import project_plural
+
+	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
+	output_dir = PathPlus(projects.global_settings.output_directory).abspath()
+
+	print(f"Generating chromatograms for {len(projects)} {project_plural(len(projects))}:")
+	for project_name in projects.per_project_settings:
+		print(f"  {project_name}")
+	print(f"Saving to {output_dir.as_posix()!r}")
+
+	for project_name in projects.per_project_settings:
+		project = load_project(output_dir / (project_name + ".gsmp"))
+
+		build_chromatogram_report(project)
 
 
 if __name__ == "__main__":

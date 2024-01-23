@@ -3,7 +3,7 @@ modname: gunshotmatch-cli
 copyright_years: "2020-2023"
 author: "Dominic Davis-Foster"
 email: "dominic@davis-foster.co.uk"
-version: "0.2.0"
+version: "0.2.1"
 username: "GunShotMatch"
 assignee: "domdfcoding"
 license: 'MIT'

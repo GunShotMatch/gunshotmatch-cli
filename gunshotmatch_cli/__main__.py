@@ -215,7 +215,13 @@ def peak_report(projects_toml: str = "projects.toml") -> None:
 	for project_name in projects.per_project_settings:
 		project = load_project(output_dir / (project_name + ".gsmp"))
 
-		build_peak_report(project)
+		assert project.consolidated_peaks is not None
+		print(f"{project.name} – {len(project.consolidated_peaks)} peaks")
+		build_peak_report(
+				project,
+				pdf_filename=output_dir / f"{project.name}_peak_report.pdf",
+				title_every_page=True,
+				)
 
 
 @click.argument("projects_toml", default="projects.toml")
@@ -241,7 +247,10 @@ def chromatograms(projects_toml: str = "projects.toml") -> None:
 	for project_name in projects.per_project_settings:
 		project = load_project(output_dir / (project_name + ".gsmp"))
 
-		build_chromatogram_report(project)
+		build_chromatogram_report(
+				project,
+				pdf_filename=output_dir / f"{project.name}_peak_report.pdf",
+				)
 
 
 if __name__ == "__main__":

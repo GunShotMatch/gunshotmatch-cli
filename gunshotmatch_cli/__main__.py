@@ -249,7 +249,7 @@ def chromatograms(projects_toml: str = "projects.toml") -> None:
 
 		build_chromatogram_report(
 				project,
-				pdf_filename=output_dir / f"{project.name}_peak_report.pdf",
+				pdf_filename=output_dir / f"{project.name}_chromatogram.pdf",
 				)
 
 

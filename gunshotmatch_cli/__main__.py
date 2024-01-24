@@ -28,11 +28,10 @@ GunShotMatch Command-Line Interface.
 
 # 3rd party
 import click
+from consolekit import CONTEXT_SETTINGS, click_group
+from consolekit.commands import SuggestionGroup
 from consolekit.options import version_option
 from consolekit.versions import get_version_callback
-from gunshotmatch_reports.chromatogram import build_chromatogram_report
-from gunshotmatch_reports.peaks import build_peak_report
-from libgunshotmatch_mpl.peakviewer import load_project
 
 # this package
 import gunshotmatch_cli
@@ -51,7 +50,7 @@ __all__ = ("decision_tree", "main", "projects", "unknown")
 						}
 				)
 		)
-@click.group()
+@click_group(context_settings=CONTEXT_SETTINGS, cls=SuggestionGroup)
 def main() -> None:
 	"""
 	GunShotMatch command-line interface.
@@ -203,6 +202,8 @@ def peak_report(projects_toml: str = "projects.toml") -> None:
 	from domdf_python_tools.paths import PathPlus
 	from gunshotmatch_pipeline.projects import Projects
 	from gunshotmatch_pipeline.utils import project_plural
+	from gunshotmatch_reports.peaks import build_peak_report
+	from libgunshotmatch_mpl.peakviewer import load_project
 
 	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
 	output_dir = PathPlus(projects.global_settings.output_directory).abspath()
@@ -235,6 +236,8 @@ def chromatograms(projects_toml: str = "projects.toml") -> None:
 	from domdf_python_tools.paths import PathPlus
 	from gunshotmatch_pipeline.projects import Projects
 	from gunshotmatch_pipeline.utils import project_plural
+	from gunshotmatch_reports.chromatogram import build_chromatogram_report
+	from libgunshotmatch_mpl.peakviewer import load_project
 
 	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
 	output_dir = PathPlus(projects.global_settings.output_directory).abspath()

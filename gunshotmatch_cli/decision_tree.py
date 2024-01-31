@@ -39,15 +39,23 @@ from gunshotmatch_pipeline.decision_tree import (
 from gunshotmatch_pipeline.projects import Projects
 from gunshotmatch_pipeline.utils import project_plural
 from sklearn.ensemble import RandomForestClassifier  # type: ignore[import]
+from sklearn.tree import DecisionTreeClassifier  # type: ignore[import]
 
 __all__ = ("train_decision_tree", )
 
 
-def train_decision_tree(projects: Projects) -> Tuple[RandomForestClassifier, List[str], List[str]]:
+def train_decision_tree(
+		projects: Projects,
+		*,
+		random_forest: bool = True,
+		) -> Tuple[RandomForestClassifier, List[str], List[str]]:
 	"""
 	Train a decision tree on the given projects.
 
 	:param projects:
+	:param random_forest: Use a random forest classifier.
+
+	.. versionchanged:: 0.4.0  Added ``random_forest`` keyword argument. Behaviour is unchanged with default value.
 	"""
 
 	print(f"Training decision tree on {len(projects)} {project_plural(len(projects))}:")
@@ -66,7 +74,10 @@ def train_decision_tree(projects: Projects) -> Tuple[RandomForestClassifier, Lis
 	# visualise_decision_tree(data, clf, factorize_map, filename="trees/decision_tree")
 	# visualise_decision_tree(data, clf, factorize_map, filename="trees/decision_tree", filetype="png")
 
-	forest_clf = RandomForestClassifier(n_jobs=4, random_state=20231020)
-	fit_decision_tree(data, forest_clf)
-	visualise_decision_tree(data, forest_clf, factorize_map, filename="trees/decision_tree")
-	return forest_clf, factorize_map, get_feature_names(data)
+	if random_forest:
+		clf = RandomForestClassifier(n_jobs=4, random_state=20231020)
+	else:
+		clf = DecisionTreeClassifier(n_jobs=4, random_state=20231020)
+	fit_decision_tree(data, clf)
+	visualise_decision_tree(data, clf, factorize_map, filename="trees/decision_tree")
+	return clf, factorize_map, get_feature_names(data)

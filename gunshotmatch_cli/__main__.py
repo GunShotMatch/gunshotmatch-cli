@@ -26,11 +26,14 @@ GunShotMatch Command-Line Interface.
 #  OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+# stdlib
+import sys
+
 # 3rd party
 import click
 from consolekit import CONTEXT_SETTINGS, click_group
 from consolekit.commands import SuggestionGroup
-from consolekit.options import version_option
+from consolekit.options import flag_option, version_option
 from consolekit.versions import get_version_callback
 
 # this package
@@ -138,8 +141,18 @@ def unknown(unknown_toml: str = "unknown.toml") -> None:
 
 @click.option("-p", "--projects", "projects_toml", default="projects.toml")
 @click.option("-o", "--unknown", "unknown_toml", default="unknown.toml")
+@flag_option(
+		"-t",
+		"--train-only",
+		default=False,
+		help="Only train the decision tree, do not predict the class of the unknown",
+		)
 @main.command()
-def decision_tree(projects_toml: str = "projects.toml", unknown_toml: str = "unknown.toml") -> None:
+def decision_tree(
+		projects_toml: str = "projects.toml",
+		unknown_toml: str = "unknown.toml",
+		train_only: bool = False,
+		) -> None:
 	"""
 	Create decision tree and predict class of an unknown sample.
 	"""
@@ -160,11 +173,16 @@ def decision_tree(projects_toml: str = "projects.toml", unknown_toml: str = "unk
 	# decision_tree_data_dir.maybe_make()
 
 	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
-	unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
+
+	if not train_only:
+		unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
 
 	classifier, factorize_map, feature_names = train_decision_tree(projects)
 
-	print("\nPreicting class for unknown", unknown.name)
+	if train_only:
+		sys.exit(0)
+
+	print("\nPredicting class for unknown", unknown.name)
 
 	unknown_sample = data_from_unknown(unknown, feature_names=feature_names)
 	# predicted_class = classifier.predict(unknown_sample)

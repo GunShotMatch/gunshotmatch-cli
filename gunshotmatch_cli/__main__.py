@@ -154,7 +154,7 @@ def unknown(unknown_toml: str = "unknown.toml") -> None:
 	# print(unknown)
 	# print(unknown.load_method())
 	# print(unknown.load_config())
-	print("Processing unknown", unknown.name)
+	print(f"Processing unknown {unknown.name!r}")
 
 	project = process_unknown(unknown, unknown.output_directory, recreate=False)
 

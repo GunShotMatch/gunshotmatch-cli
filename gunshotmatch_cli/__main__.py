@@ -147,11 +147,18 @@ def unknown(unknown_toml: str = "unknown.toml") -> None:
 		default=False,
 		help="Only train the decision tree, do not predict the class of the unknown",
 		)
+@flag_option(
+		"-r/-R",
+		"--random-forest/--no-random-forest",
+		default=True,
+		help="Use a random forest classifier / use a single decision tree.",
+		)
 @main.command()
 def decision_tree(
 		projects_toml: str = "projects.toml",
 		unknown_toml: str = "unknown.toml",
 		train_only: bool = False,
+		random_forest: bool = True,
 		) -> None:
 	"""
 	Create decision tree and predict class of an unknown sample.
@@ -177,7 +184,7 @@ def decision_tree(
 	if not train_only:
 		unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
 
-	classifier, factorize_map, feature_names = train_decision_tree(projects)
+	classifier, factorize_map, feature_names = train_decision_tree(projects, random_forest=random_forest)
 
 	if train_only:
 		sys.exit(0)

@@ -77,7 +77,7 @@ def train_decision_tree(
 	if random_forest:
 		clf = RandomForestClassifier(n_jobs=4, random_state=20231020)
 	else:
-		clf = DecisionTreeClassifier(n_jobs=4, random_state=20231020)
+		clf = DecisionTreeClassifier(random_state=20231020)
 	fit_decision_tree(data, clf)
 	visualise_decision_tree(data, clf, factorize_map, filename="trees/decision_tree")
 	return clf, factorize_map, get_feature_names(data)

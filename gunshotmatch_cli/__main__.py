@@ -28,6 +28,7 @@ GunShotMatch Command-Line Interface.
 
 # stdlib
 import sys
+from typing import TYPE_CHECKING, List
 
 # 3rd party
 import click
@@ -39,7 +40,32 @@ from consolekit.versions import get_version_callback
 # this package
 import gunshotmatch_cli
 
+if TYPE_CHECKING:
+	# 3rd party
+	from click.shell_completion import CompletionItem
+
 __all__ = ("decision_tree", "main", "projects", "unknown")
+
+
+class _TomlPath(click.Path):
+
+	def __init__(self):
+		super().__init__(exists=True, dir_okay=False)
+
+	def shell_complete(
+			self,
+			ctx: click.Context,
+			param: click.Parameter,
+			incomplete: str,
+			) -> List["CompletionItem"]:
+
+		# stdlib
+		import glob
+
+		# 3rd party
+		from click.shell_completion import CompletionItem
+
+		return [CompletionItem(f, type="plain") for f in glob.glob(f"{incomplete}*.toml")]
 
 
 @version_option(
@@ -60,7 +86,7 @@ def main() -> None:
 	"""  # noqa: D403  (false positive)
 
 
-@click.argument("projects_toml", default="projects.toml")
+@click.argument("projects_toml", default="projects.toml", type=_TomlPath())
 @main.command()
 def projects(projects_toml: str = "projects.toml") -> None:
 	"""
@@ -111,7 +137,7 @@ def projects(projects_toml: str = "projects.toml") -> None:
 		print(len(project.consolidated_peaks))
 
 
-@click.argument("unknown_toml", default="unknown.toml")
+@click.argument("unknown_toml", default="unknown.toml", type=_TomlPath())
 @main.command()
 def unknown(unknown_toml: str = "unknown.toml") -> None:
 	"""
@@ -139,8 +165,8 @@ def unknown(unknown_toml: str = "unknown.toml") -> None:
 	# print(ms_comparison_df)
 
 
-@click.option("-p", "--projects", "projects_toml", default="projects.toml")
-@click.option("-o", "--unknown", "unknown_toml", default="unknown.toml")
+@click.option("-p", "--projects", "projects_toml", default="projects.toml", type=_TomlPath())
+@click.option("-u", "--unknown", "unknown_toml", default="unknown.toml", type=_TomlPath())
 @flag_option(
 		"-t",
 		"--train-only",
@@ -216,7 +242,7 @@ def decision_tree(
 	# print("take:", list(take))
 
 
-@click.argument("projects_toml", default="projects.toml")
+@click.argument("projects_toml", default="projects.toml", type=_TomlPath())
 @main.command()
 def peak_report(projects_toml: str = "projects.toml") -> None:
 	"""

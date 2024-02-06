@@ -65,7 +65,12 @@ class _TomlPath(click.Path):
 		# 3rd party
 		from click.shell_completion import CompletionItem
 
-		return [CompletionItem(f, type="plain") for f in glob.glob(f"{incomplete}*.toml")]
+		completions = []
+		for file in glob.glob(f"{incomplete}*"):
+			if file.endswith(".toml"):
+				completions.append(CompletionItem(file, type="plain"))
+
+		return completions
 
 
 @version_option(

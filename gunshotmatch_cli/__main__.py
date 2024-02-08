@@ -27,8 +27,9 @@ GunShotMatch Command-Line Interface.
 #
 
 # stdlib
+import os
 import sys
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 # 3rd party
 import click
@@ -142,9 +143,56 @@ def projects(projects_toml: str = "projects.toml") -> None:
 		print(len(project.consolidated_peaks))
 
 
+@click.argument("unknown_toml", default="unknown.toml")
+@flag_option("-r", "--recreate")
+@click.option("-t", "--table", default='')
+@click.command()
+def _unkn(unknown_toml: str = "unknown.toml", recreate: bool = False, table: str = '') -> str:
+	# sys.stderr.write(repr(unknown_toml) + "\n")
+	return unknown_toml
+
+
+def complete_table(ctx: click.Context, param: click.Parameter, incomplete: str) -> List["CompletionItem"]:
+	argv = [arg for arg in os.getenv("COMP_WORDS").strip().splitlines()]
+
+	unknown_toml_filename = "unknown.toml"
+	try:
+		with _unkn.make_context(argv[0], argv[2:]) as ctx:
+			unknown_toml_filename = _unkn.invoke(ctx)
+	except (Exception, SystemExit):
+		pass
+
+	try:
+		with open(unknown_toml_filename, "rb") as fp:
+			# 3rd party
+			from gunshotmatch_pipeline.utils import tomllib
+			unknown_toml_content: Dict[str, Any] = tomllib.load(fp)
+			tables = [k for k, v in unknown_toml_content.items() if isinstance(v, dict)]
+			# 3rd party
+			from click.shell_completion import CompletionItem
+			table_names = [table for table in tables if table.startswith(incomplete)]
+			completions = []
+			for table in table_names:
+				if ' ' in table_names:
+					completions.append(CompletionItem('"' + table.replace(' ', "\\ ") + '"'))
+				else:
+					completions.append(CompletionItem(table))
+			return completions
+	except Exception:
+		return []
+
+
 @click.argument("unknown_toml", default="unknown.toml", type=_TomlPath())
+@click.option(
+		"-t",
+		"--table",
+		help="TOML table name for the unknown sample's settings. If not given top-level keys are used",
+		default=None,
+		shell_complete=complete_table
+		)
+@flag_option("-r", "--recreate", help="Recreate output files (e.g. if method changed)")
 @main.command()
-def unknown(unknown_toml: str = "unknown.toml") -> None:
+def unknown(unknown_toml: str = "unknown.toml", recreate: bool = False, table: Optional[str] = None) -> None:
 	"""
 	Pipeline for unknown propellant/OGSR sample.
 	"""
@@ -152,16 +200,21 @@ def unknown(unknown_toml: str = "unknown.toml") -> None:
 	# 3rd party
 	from domdf_python_tools.paths import PathPlus
 	from gunshotmatch_pipeline.unknowns import UnknownSettings, process_unknown
+	from gunshotmatch_pipeline.utils import tomllib
 
 	# from gunshotmatch_pipeline.exporters import write_matches_json
 
-	unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
+	if table:
+		unknown_settings_toml = tomllib.loads(PathPlus("unknown.toml").read_text())
+		unknown = UnknownSettings(table, **unknown_settings_toml[table])
+	else:
+		unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
 	# print(unknown)
 	# print(unknown.load_method())
 	# print(unknown.load_config())
 	print(f"Processing unknown {unknown.name!r}")
 
-	project = process_unknown(unknown, unknown.output_directory, recreate=False)
+	project = process_unknown(unknown, unknown.output_directory, recreate=recreate)
 
 	# write_matches_json(project, PathPlus(unknown.output_directory))
 	assert project.consolidated_peaks is not None

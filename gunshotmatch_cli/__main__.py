@@ -173,7 +173,7 @@ def complete_table(ctx: click.Context, param: click.Parameter, incomplete: str) 
 			table_names = [table for table in tables if table.startswith(incomplete)]
 			completions = []
 			for table in table_names:
-				if ' ' in table_names:
+				if ' ' in table:
 					completions.append(CompletionItem('"' + table.replace(' ', "\\ ") + '"'))
 				else:
 					completions.append(CompletionItem(table))

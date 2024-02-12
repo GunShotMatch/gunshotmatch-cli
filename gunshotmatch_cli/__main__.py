@@ -153,7 +153,7 @@ def _unkn(unknown_toml: str = "unknown.toml", recreate: bool = False, table: str
 
 
 def complete_table(ctx: click.Context, param: click.Parameter, incomplete: str) -> List["CompletionItem"]:
-	argv = [arg for arg in os.getenv("COMP_WORDS").strip().splitlines()]
+	argv = [arg for arg in os.getenv("COMP_WORDS", '').strip().splitlines()]
 
 	unknown_toml_filename = "unknown.toml"
 	try:

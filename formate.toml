@@ -42,4 +42,4 @@ known_third_party = [
     "numpy",
     "scikit_learn",
 ]
-known_first_party = "gunshotmatch_cli"
+known_first_party = [ "gunshotmatch_cli",]

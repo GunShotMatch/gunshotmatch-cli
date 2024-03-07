@@ -50,8 +50,8 @@ __all__ = ("decision_tree", "main", "projects", "unknown")
 
 class _TomlPath(click.Path):
 
-	def __init__(self):
-		super().__init__(exists=True, dir_okay=False)
+	def __init__(self, exists: bool = True):
+		super().__init__(exists=exists, dir_okay=False)
 
 	def shell_complete(
 			self,
@@ -224,7 +224,7 @@ def unknown(unknown_toml: str = "unknown.toml", recreate: bool = False, table: O
 
 
 @click.option("-p", "--projects", "projects_toml", default="projects.toml", type=_TomlPath())
-@click.option("-u", "--unknown", "unknown_toml", default="unknown.toml", type=_TomlPath())
+@click.option("-u", "--unknown", "unknown_toml", default="unknown.toml", type=_TomlPath(exists=False))
 @flag_option(
 		"-t",
 		"--train-only",

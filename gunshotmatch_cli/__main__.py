@@ -232,6 +232,12 @@ def unknown(unknown_toml: str = "unknown.toml", recreate: bool = False, table: O
 		help="Only train the decision tree, do not predict the class of the unknown",
 		)
 @flag_option(
+		"-v.-V",
+		"--visualise/--no-visualise",
+		default=True,
+		help="Whether to visualise the decision tree (produce dot and PNG files)",
+		)
+@flag_option(
 		"-r/-R",
 		"--random-forest/--no-random-forest",
 		default=True,
@@ -243,6 +249,7 @@ def decision_tree(
 		unknown_toml: str = "unknown.toml",
 		train_only: bool = False,
 		random_forest: bool = True,
+		visualise: bool = True,
 		) -> None:
 	"""
 	Create decision tree and predict class of an unknown sample.
@@ -268,7 +275,11 @@ def decision_tree(
 	if not train_only:
 		unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
 
-	classifier, factorize_map, feature_names = train_decision_tree(projects, random_forest=random_forest)
+	classifier, factorize_map, feature_names = train_decision_tree(
+		projects,
+		random_forest=random_forest,
+		visualise=visualise,
+	)
 
 	if train_only:
 		sys.exit(0)

@@ -27,7 +27,7 @@ Decision tree utilities.
 #
 
 # stdlib
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 # 3rd party
 from gunshotmatch_pipeline.decision_tree import (
@@ -48,6 +48,7 @@ def train_decision_tree(
 		projects: Projects,
 		*,
 		random_forest: bool = True,
+		visualise: Union[bool, str] = True,
 		) -> Tuple[RandomForestClassifier, List[str], List[str]]:
 	"""
 	Train a decision tree on the given projects.
@@ -78,6 +79,12 @@ def train_decision_tree(
 		clf = RandomForestClassifier(n_jobs=4, random_state=20231020)
 	else:
 		clf = DecisionTreeClassifier(random_state=20231020)
+
 	fit_decision_tree(data, clf)
-	visualise_decision_tree(data, clf, factorize_map, filename="trees/decision_tree")
+
+	if visualise:
+		if isinstance(visualise, bool):
+			visualise = "trees/decision_tree"
+		visualise_decision_tree(data, clf, factorize_map, filename=visualise)
+
 	return clf, factorize_map, get_feature_names(data)

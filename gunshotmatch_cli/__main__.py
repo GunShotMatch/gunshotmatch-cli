@@ -165,11 +165,11 @@ def complete_table(ctx: click.Context, param: click.Parameter, incomplete: str) 
 	try:
 		with open(unknown_toml_filename, "rb") as fp:
 			# 3rd party
+			from click.shell_completion import CompletionItem
 			from gunshotmatch_pipeline.utils import tomllib
+
 			unknown_toml_content: Dict[str, Any] = tomllib.load(fp)
 			tables = [k for k, v in unknown_toml_content.items() if isinstance(v, dict)]
-			# 3rd party
-			from click.shell_completion import CompletionItem
 			table_names = [table for table in tables if table.startswith(incomplete)]
 			completions = []
 			for table in table_names:

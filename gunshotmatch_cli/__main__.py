@@ -29,7 +29,7 @@ GunShotMatch Command-Line Interface.
 # stdlib
 import os
 import sys
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, Iterator, List, Optional
 
 # 3rd party
 import click
@@ -204,23 +204,28 @@ def unknown(unknown_toml: str = "unknown.toml", recreate: bool = False, table: O
 
 	# from gunshotmatch_pipeline.exporters import write_matches_json
 
-	if table:
-		unknown_settings_toml = tomllib.loads(PathPlus("unknown.toml").read_text())
-		unknown = UnknownSettings(table, **unknown_settings_toml[table])
-	else:
-		unknown = UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
-	# print(unknown)
-	# print(unknown.load_method())
-	# print(unknown.load_config())
-	print(f"Processing unknown {unknown.name!r}")
+	def iter_unknowns() -> Iterator[UnknownSettings]:
 
-	project = process_unknown(unknown, unknown.output_directory, recreate=recreate)
+		if table and table == ":all:":
+			unknown_settings_toml = tomllib.loads(PathPlus("unknown.toml").read_text())
+			table_names = [k for k, v in unknown_settings_toml.items() if isinstance(v, dict)]
 
-	# write_matches_json(project, PathPlus(unknown.output_directory))
-	assert project.consolidated_peaks is not None
-	print(len(project.consolidated_peaks))
+			for table_name in table_names:
+				yield UnknownSettings(table_name, **unknown_settings_toml[table_name])
+				print()
 
-	# print(ms_comparison_df)
+		elif table:
+			unknown_settings_toml = tomllib.loads(PathPlus("unknown.toml").read_text())
+			yield UnknownSettings(table, **unknown_settings_toml[table])
+
+		else:
+			yield UnknownSettings.from_toml(PathPlus(unknown_toml).read_text())
+
+	for unknown in iter_unknowns():
+		print(f"Processing unknown {unknown.name!r}")
+		project = process_unknown(unknown, unknown.output_directory, recreate=recreate)
+		assert project.consolidated_peaks is not None
+		print(len(project.consolidated_peaks))
 
 
 @click.option("-p", "--projects", "projects_toml", default="projects.toml", type=_TomlPath())

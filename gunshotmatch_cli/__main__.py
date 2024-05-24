@@ -103,7 +103,7 @@ def projects(projects_toml: str = "projects.toml") -> None:
 	import gunshotmatch_pipeline.results
 	import sdjson
 	from domdf_python_tools.paths import PathPlus
-	from gunshotmatch_pipeline.exporters import verify_saved_project, write_combined_csv, write_matches_json
+	from gunshotmatch_pipeline.exporters import verify_saved_project, write_combined_csv
 	from gunshotmatch_pipeline.projects import Projects, process_projects
 	from gunshotmatch_pipeline.utils import project_plural
 	from libgunshotmatch.peak import write_project_alignment

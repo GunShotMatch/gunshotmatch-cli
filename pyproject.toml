@@ -4,18 +4,18 @@ build-backend = "whey"
 
 [project]
 name = "gunshotmatch-cli"
-version = "0.8.0"
+version = "0.9.0"
 description = "GunShotMatch Command-Line Interface."
 readme = "README.rst"
 keywords = []
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 
+[project.license]
+file = "LICENSE"
+
 [[project.authors]]
 name = "Dominic Davis-Foster"
 email = "dominic@davis-foster.co.uk"
-
-[project.license]
-file = "LICENSE"
 
 [project.urls]
 Homepage = "https://github.com/GunShotMatch/gunshotmatch-cli"

@@ -37,6 +37,7 @@ known_third_party = [
     "libgunshotmatch_mpl",
     "numpy",
     "scikit_learn",
+    "sdjson",
 ]
 known_first_party = [ "gunshotmatch_cli",]
 

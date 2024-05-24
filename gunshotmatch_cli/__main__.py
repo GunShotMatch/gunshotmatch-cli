@@ -104,7 +104,7 @@ def projects(projects_toml: str = "projects.toml") -> None:
 	from gunshotmatch_pipeline.exporters import verify_saved_project, write_combined_csv, write_matches_json
 	from gunshotmatch_pipeline.projects import Projects, process_projects
 	from gunshotmatch_pipeline.utils import project_plural
-	from libgunshotmatch.peak import write_alignment
+	from libgunshotmatch.peak import write_project_alignment
 	from libgunshotmatch.project import Project
 
 	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
@@ -127,7 +127,7 @@ def projects(projects_toml: str = "projects.toml") -> None:
 		# 		from_file = Datafile.from_file(datafile_export_filename)
 		# 		verify_saved_datafile(datafile, from_file)
 
-		write_alignment(project.alignment, project.name, output_dir)
+		write_project_alignment(project, output_dir)
 		for repeat in project.datafile_data.values():
 			write_combined_csv(repeat, output_dir)
 

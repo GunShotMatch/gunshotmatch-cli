@@ -145,7 +145,7 @@ def projects(projects_toml: str = "projects.toml") -> None:
 		if (output_dir / matches_json_filename).is_file():
 			existing_file_content = (output_dir / matches_json_filename).read_text().strip()
 			existing_matches_json = sdjson.loads(existing_file_content)
-			matches_data_with_old_mtime = {
+			matches_data_with_old_mtime: Dict[str, Dict[str, Any]] = {
 					"metadata": dict(matches_data["metadata"]),
 					"compounds": matches_data["compounds"],
 					}

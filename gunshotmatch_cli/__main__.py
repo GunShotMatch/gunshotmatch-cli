@@ -100,6 +100,8 @@ def projects(projects_toml: str = "projects.toml") -> None:
 	"""
 
 	# 3rd party
+	import gunshotmatch_pipeline.results
+	import sdjson
 	from domdf_python_tools.paths import PathPlus
 	from gunshotmatch_pipeline.exporters import verify_saved_project, write_combined_csv, write_matches_json
 	from gunshotmatch_pipeline.projects import Projects, process_projects
@@ -136,7 +138,24 @@ def projects(projects_toml: str = "projects.toml") -> None:
 		# 		os.path.join(output_dir, project.name + "_MATCHES.csv"), project, minutes=True, n_hits=5
 		# 		)
 
-		write_matches_json(project, output_dir)
+		write_new_output = True
+		matches_json_filename = f"{project.name}.json"
+		matches_data = gunshotmatch_pipeline.results.matches(project)
+
+		if (output_dir / matches_json_filename).is_file():
+			existing_file_content = (output_dir / matches_json_filename).read_text().strip()
+			existing_matches_json = sdjson.loads(existing_file_content)
+			matches_data_with_old_mtime = {
+					"metadata": dict(matches_data["metadata"]),
+					"compounds": matches_data["compounds"],
+					}
+			matches_data_with_old_mtime["metadata"]["created"] = existing_matches_json["metadata"]["created"]
+			if sdjson.dumps(matches_data_with_old_mtime, indent=2).strip() == existing_file_content:
+				# Unchanged
+				write_new_output = False
+
+		if write_new_output:
+			(output_dir / matches_json_filename).write_clean(sdjson.dumps(matches_data, indent=2))
 
 		assert project.consolidated_peaks is not None
 		print(project.consolidated_peaks)

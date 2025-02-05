@@ -85,7 +85,7 @@ gunshotmatch-cli
 	:target: https://github.com/GunShotMatch/gunshotmatch-cli/commit/master
 	:alt: GitHub last commit
 
-.. |maintained| image:: https://img.shields.io/maintenance/yes/2024
+.. |maintained| image:: https://img.shields.io/maintenance/yes/2025
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/gunshotmatch-cli

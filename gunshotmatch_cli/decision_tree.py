@@ -38,8 +38,8 @@ from gunshotmatch_pipeline.decision_tree import (
 		)
 from gunshotmatch_pipeline.projects import Projects
 from gunshotmatch_pipeline.utils import project_plural
-from sklearn.ensemble import RandomForestClassifier  # type: ignore[import]
-from sklearn.tree import DecisionTreeClassifier  # type: ignore[import]
+from sklearn.ensemble import RandomForestClassifier  # type: ignore[import-untyped]
+from sklearn.tree import DecisionTreeClassifier  # type: ignore[import-untyped]
 
 __all__ = ("train_decision_tree", )
 

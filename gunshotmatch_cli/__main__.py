@@ -82,8 +82,8 @@ class _TomlPath(click.Path):
 						"gunshotmatch-pipeline": "GunShotMatch Pipeline",
 						"libgunshotmatch": "LibGunShotMatch",
 						"scikit-learn": "scikit-learn",
-						}
-				)
+						},
+				),
 		)
 @click_group(context_settings=CONTEXT_SETTINGS, cls=SuggestionGroup)
 def main() -> None:
@@ -207,7 +207,7 @@ def complete_table(ctx: click.Context, param: click.Parameter, incomplete: str) 
 		"--table",
 		help="TOML table name for the unknown sample's settings. If not given top-level keys are used",
 		default=None,
-		shell_complete=complete_table
+		shell_complete=complete_table,
 		)
 @flag_option("-r", "--recreate", help="Recreate output files (e.g. if method changed)")
 @main.command()

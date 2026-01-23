@@ -55,6 +55,8 @@ def train_decision_tree(
 
 	:param projects:
 	:param random_forest: Use a random forest classifier.
+	:param visualise: Whether to create visual representations of the decision tree(s).
+		Written to ``trees/decision_tree`` unless a string is given specifying a different path.
 
 	.. versionchanged:: 0.4.0  Added ``random_forest`` keyword argument. Behaviour is unchanged with default value.
 	"""

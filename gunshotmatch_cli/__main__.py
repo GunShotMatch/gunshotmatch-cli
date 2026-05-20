@@ -355,8 +355,10 @@ def peak_report(projects_toml: str = "projects.toml") -> None:
 	from gunshotmatch_reports.peaks import build_peak_report
 	from libgunshotmatch_mpl.peakviewer import load_project
 
-	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
-	output_dir = PathPlus(projects.global_settings.output_directory).abspath()
+	projects_file = PathPlus(projects_toml)
+	projects = Projects.from_toml(projects_file.read_text())
+
+	output_dir = (projects_file.parent / projects.global_settings.output_directory).abspath()
 
 	print(f"Generating peak reports for {len(projects)} {project_plural(len(projects))}:")
 	for project_name in projects.per_project_settings:

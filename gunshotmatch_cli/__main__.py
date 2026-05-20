@@ -62,14 +62,18 @@ class _TomlPath(click.Path):
 
 		# stdlib
 		import glob
+		import pathlib
 
 		# 3rd party
 		from click.shell_completion import CompletionItem
 
 		completions = []
 		for file in glob.glob(f"{incomplete}*"):
-			if file.endswith(".toml"):
+			file_p = pathlib.Path(file)
+			if file_p.suffix == ".toml":
 				completions.append(CompletionItem(file, type="plain"))
+			elif file_p.is_dir():
+				completions.append(CompletionItem(file + '/', type="dir"))
 
 		return completions
 

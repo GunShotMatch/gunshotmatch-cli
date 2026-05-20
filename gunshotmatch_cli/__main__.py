@@ -106,14 +106,15 @@ def projects(projects_toml: str = "projects.toml") -> None:
 	# 3rd party
 	import gunshotmatch_pipeline.results
 	import sdjson
-	from domdf_python_tools.paths import PathPlus
+	from domdf_python_tools.paths import PathPlus, in_directory
 	from gunshotmatch_pipeline.exporters import verify_saved_project, write_combined_csv
 	from gunshotmatch_pipeline.projects import Projects, process_projects
 	from gunshotmatch_pipeline.utils import project_plural
 	from libgunshotmatch.peak import write_project_alignment
 	from libgunshotmatch.project import Project
 
-	projects = Projects.from_toml(PathPlus(projects_toml).read_text())
+	projects_file = PathPlus(projects_toml)
+	projects = Projects.from_toml(projects_file.read_text())
 	output_dir = PathPlus(projects.global_settings.output_directory).abspath()
 
 	print(f"Processing {len(projects)} {project_plural(len(projects))}:")
@@ -121,49 +122,50 @@ def projects(projects_toml: str = "projects.toml") -> None:
 		print(f"  {project_name}")
 	print(f"Saving to {output_dir.as_posix()!r}")
 
-	for project in process_projects(projects, output_dir, recreate=False):
-		project_from_disk = Project.from_file(output_dir / (project.name + ".gsmp"))
-		verify_saved_project(project, project_from_disk)
+	with in_directory(projects_file.parent):
+		for project in process_projects(projects, output_dir, recreate=False):
+			project_from_disk = Project.from_file(output_dir / (project.name + ".gsmp"))
+			verify_saved_project(project, project_from_disk)
 
-		# for repeat in project.datafile_data.values():
-		# 	datafile = repeat.datafile
+			# for repeat in project.datafile_data.values():
+			# 	datafile = repeat.datafile
 
-		# 	verify_saved_file = False
-		# 	if verify_saved_file:
-		# 		from_file = Datafile.from_file(datafile_export_filename)
-		# 		verify_saved_datafile(datafile, from_file)
+			# 	verify_saved_file = False
+			# 	if verify_saved_file:
+			# 		from_file = Datafile.from_file(datafile_export_filename)
+			# 		verify_saved_datafile(datafile, from_file)
 
-		write_project_alignment(project, output_dir)
-		for repeat in project.datafile_data.values():
-			write_combined_csv(repeat, output_dir)
+			write_project_alignment(project, output_dir)
+			for repeat in project.datafile_data.values():
+				write_combined_csv(repeat, output_dir)
 
-		# Matches Sheet
-		# MatchesCSVExporter(
-		# 		os.path.join(output_dir, project.name + "_MATCHES.csv"), project, minutes=True, n_hits=5
-		# 		)
+			# Matches Sheet
+			# MatchesCSVExporter(
+			# 		os.path.join(output_dir, project.name + "_MATCHES.csv"), project, minutes=True, n_hits=5
+			# 		)
 
-		write_new_output = True
-		matches_json_filename = f"{project.name}.json"
-		matches_data = gunshotmatch_pipeline.results.matches(project)
+			write_new_output = True
+			matches_json_filename = f"{project.name}.json"
+			matches_data = gunshotmatch_pipeline.results.matches(project)
 
-		if (output_dir / matches_json_filename).is_file():
-			existing_file_content = (output_dir / matches_json_filename).read_text().strip()
-			existing_matches_json = sdjson.loads(existing_file_content)
-			matches_data_with_old_mtime: Dict[str, Dict[str, Any]] = {
-					"metadata": dict(matches_data["metadata"]),
-					"compounds": matches_data["compounds"],
-					}
-			matches_data_with_old_mtime["metadata"]["created"] = existing_matches_json["metadata"]["created"]
-			if sdjson.dumps(matches_data_with_old_mtime, indent=2).strip() == existing_file_content:
-				# Unchanged
-				write_new_output = False
+			if (output_dir / matches_json_filename).is_file():
+				existing_file_content = (output_dir / matches_json_filename).read_text().strip()
+				existing_matches_json = sdjson.loads(existing_file_content)
+				matches_data_with_old_mtime: Dict[str, Dict[str, Any]] = {
+						"metadata": dict(matches_data["metadata"]),
+						"compounds": matches_data["compounds"],
+						}
+				matches_data_with_old_mtime["metadata"]["created"] = existing_matches_json["metadata"]["created"]
+				if sdjson.dumps(matches_data_with_old_mtime, indent=2).strip() == existing_file_content:
+					# Unchanged
+					write_new_output = False
 
-		if write_new_output:
-			(output_dir / matches_json_filename).write_clean(sdjson.dumps(matches_data, indent=2))
+			if write_new_output:
+				(output_dir / matches_json_filename).write_clean(sdjson.dumps(matches_data, indent=2))
 
-		assert project.consolidated_peaks is not None
-		print(project.consolidated_peaks)
-		print(len(project.consolidated_peaks))
+			assert project.consolidated_peaks is not None
+			print(project.consolidated_peaks)
+			print(len(project.consolidated_peaks))
 
 
 @click.argument("unknown_toml", default="unknown.toml")
